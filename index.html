@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Event Page</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <script>
+  /* ============================================
+     EVENT PAGE CONFIG — Edit this section only!
+  ============================================ */
+  const CONFIG = {
+    eventName:    "Summer Rooftop Bash",
+    tagline:      "Good music. Good people. Great views.",
+    date:         "Saturday, July 19, 2026",
+    time:         "7:00 PM – 12:00 AM",
+    location:     "The Rooftop, 123 Main St, Salt Lake City",
+    mapsUrl:      "https://maps.google.com",
+    rsvpUrl:      "#",
+    rsvpLabel:    "RSVP Now",
+    darkMode:     true,       // true | false | "toggle"
+    accentColor:  "#f472b6",  // any hex color
+  };
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent: #f472b6;
+      --bg: #0a0a0a;
+      --surface: #141414;
+      --border: #2a2a2a;
+      --text: #f0f0f0;
+      --muted: #777;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg); color: var(--text);
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 2rem 1.25rem 4rem;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    #themeToggle {
+      position: fixed; top: 1.2rem; right: 1.2rem;
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text); padding: 0.4rem 0.9rem;
+      border-radius: 999px; cursor: pointer;
+      font-size: 0.8rem; font-family: 'DM Sans', sans-serif;
+      font-weight: 500; transition: all 0.2s; display: none;
+    }
+
+    .card {
+      width: 100%; max-width: 560px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px; overflow: hidden;
+    }
+
+    .hero {
+      padding: 3rem 2rem 2rem;
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .event-tag {
+      display: inline-block;
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 1rem;
+    }
+
+    .event-name {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 7vw, 3.2rem);
+      font-weight: 800; letter-spacing: -1.5px;
+      line-height: 1.05; margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    .tagline {
+      font-size: 1rem; color: var(--muted);
+      line-height: 1.6; max-width: 360px; margin: 0 auto;
+    }
+
+    .details {
+      padding: 1.75rem 2rem;
+      display: flex; flex-direction: column; gap: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .detail-row {
+      display: flex; align-items: flex-start; gap: 14px;
+    }
+
+    .detail-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: var(--bg); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0;
+    }
+
+    .detail-label {
+      font-size: 0.75rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+
+    .detail-value {
+      font-size: 0.95rem; font-weight: 500; color: var(--text);
+    }
+
+    .detail-link {
+      font-size: 0.8rem; color: var(--accent);
+      text-decoration: none; margin-top: 2px; display: inline-block;
+    }
+    .detail-link:hover { text-decoration: underline; }
+
+    .countdown {
+      padding: 1.75rem 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .countdown-label {
+      font-size: 0.75rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.5px;
+      margin-bottom: 1rem; text-align: center;
+    }
+
+    .countdown-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 10px; text-align: center;
+    }
+
+    .countdown-unit {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 12px; padding: 0.75rem 0.5rem;
+    }
+
+    .countdown-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.6rem; font-weight: 800;
+      color: var(--accent); line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .countdown-unit-label {
+      font-size: 0.65rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+
+    .rsvp {
+      padding: 1.75rem 2rem; text-align: center;
+    }
+
+    .btn-rsvp {
+      display: inline-block;
+      padding: 0.85rem 2.5rem;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 999px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .btn-rsvp:hover { opacity: 0.88; transform: translateY(-2px); }
+
+    .footer {
+      margin-top: 2rem; font-size: 0.75rem;
+      color: var(--muted); text-align: center;
+    }
+    .footer a { color: var(--muted); text-decoration: none; font-weight: 600; }
+    .footer a:hover { color: var(--text); }
+
+    @media (max-width: 480px) {
+      .hero { padding: 2rem 1.25rem 1.5rem; }
+      .details, .countdown, .rsvp { padding: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <button id="themeToggle">☀️ Light</button>
+
+  <div class="card">
+    <div class="hero">
+      <p class="event-tag" id="eventTag">✦ You're Invited</p>
+      <h1 class="event-name" id="eventName"></h1>
+      <p class="tagline" id="tagline"></p>
+    </div>
+
+    <div class="details">
+      <div class="detail-row">
+        <div class="detail-icon">📅</div>
+        <div>
+          <p class="detail-label">Date</p>
+          <p class="detail-value" id="detailDate"></p>
+        </div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-icon">🕖</div>
+        <div>
+          <p class="detail-label">Time</p>
+          <p class="detail-value" id="detailTime"></p>
+        </div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-icon">📍</div>
+        <div>
+          <p class="detail-label">Location</p>
+          <p class="detail-value" id="detailLocation"></p>
+          <a id="mapsLink" href="#" class="detail-link" target="_blank">View on Google Maps →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="countdown">
+      <p class="countdown-label">Counting down to the event</p>
+      <div class="countdown-grid">
+        <div class="countdown-unit"><div class="countdown-num" id="days">00</div><div class="countdown-unit-label">Days</div></div>
+        <div class="countdown-unit"><div class="countdown-num" id="hours">00</div><div class="countdown-unit-label">Hours</div></div>
+        <div class="countdown-unit"><div class="countdown-num" id="minutes">00</div><div class="countdown-unit-label">Mins</div></div>
+        <div class="countdown-unit"><div class="countdown-num" id="seconds">00</div><div class="countdown-unit-label">Secs</div></div>
+      </div>
+    </div>
+
+    <div class="rsvp">
+      <a id="rsvpBtn" href="#" class="btn-rsvp">RSVP Now</a>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>event-page-template was made by <a href="https://github.com/bloxiebuilds" target="_blank">bloxiebuilds</a></p>
+  </div>
+
+  <script>
+    // Apply config
+    document.documentElement.style.setProperty('--accent', CONFIG.accentColor);
+    document.getElementById('eventName').textContent    = CONFIG.eventName;
+    document.getElementById('tagline').textContent      = CONFIG.tagline;
+    document.getElementById('detailDate').textContent   = CONFIG.date;
+    document.getElementById('detailTime').textContent   = CONFIG.time;
+    document.getElementById('detailLocation').textContent = CONFIG.location;
+    document.getElementById('mapsLink').href            = CONFIG.mapsUrl;
+    document.getElementById('rsvpBtn').href             = CONFIG.rsvpUrl;
+    document.getElementById('rsvpBtn').textContent      = CONFIG.rsvpLabel;
+
+    // Theme
+    var btn = document.getElementById('themeToggle');
+    var isDark = true;
+
+    function setDark() {
+      document.documentElement.style.setProperty('--bg',      '#0a0a0a');
+      document.documentElement.style.setProperty('--surface', '#141414');
+      document.documentElement.style.setProperty('--border',  '#2a2a2a');
+      document.documentElement.style.setProperty('--text',    '#f0f0f0');
+      document.documentElement.style.setProperty('--muted',   '#777777');
+      btn.textContent = '☀️ Light'; isDark = true;
+    }
+    function setLight() {
+      document.documentElement.style.setProperty('--bg',      '#f5f5f5');
+      document.documentElement.style.setProperty('--surface', '#ffffff');
+      document.documentElement.style.setProperty('--border',  '#e5e5e5');
+      document.documentElement.style.setProperty('--text',    '#111111');
+      document.documentElement.style.setProperty('--muted',   '#888888');
+      btn.textContent = '🌙 Dark'; isDark = false;
+    }
+
+    if      (CONFIG.darkMode === true)   { setDark(); }
+    else if (CONFIG.darkMode === false)  { setLight(); }
+    else { setDark(); btn.style.display = 'block'; }
+
+    btn.addEventListener('click', function() { isDark ? setLight() : setDark(); });
+
+    // Countdown
+    function updateCountdown() {
+      var eventDate = new Date(CONFIG.date);
+      var now = new Date();
+      var diff = eventDate - now;
+      if (diff <= 0) {
+        document.getElementById('days').textContent    = '00';
+        document.getElementById('hours').textContent   = '00';
+        document.getElementById('minutes').textContent = '00';
+        document.getElementById('seconds').textContent = '00';
+        return;
+      }
+      document.getElementById('days').textContent    = String(Math.floor(diff / 86400000)).padStart(2,'0');
+      document.getElementById('hours').textContent   = String(Math.floor((diff % 86400000) / 3600000)).padStart(2,'0');
+      document.getElementById('minutes').textContent = String(Math.floor((diff % 3600000) / 60000)).padStart(2,'0');
+      document.getElementById('seconds').textContent = String(Math.floor((diff % 60000) / 1000)).padStart(2,'0');
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
